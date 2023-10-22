@@ -17,7 +17,7 @@ func Run() {
 	rows := csvreader.ReadCSV(conf)
 	sl := models.NewServerLog(rows)
 	uc := usecase.NewLogAnalysisUseCase(sl)
-	bs := uc.SearchBreakServer()
+	bs := uc.SearchBreakServer(conf.PingOutCount)
 
 	result := Result{bs}
 	for _, bs2 := range result.BreakServers {

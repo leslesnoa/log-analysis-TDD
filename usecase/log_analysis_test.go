@@ -18,17 +18,18 @@ func TestSearchBreakServer(t *testing.T) {
 		rows := csvreader.ReadCSV(conf)
 		l := models.NewServerLog(rows)
 		uc := NewLogAnalysisUseCase(l)
+		expectedTime, _ := time.ParseDuration("3s")
 		expected := []BreakServer{
 			{
 				net.ParseIP("192.168.1.1"),
-				1 * time.Second,
+				&expectedTime,
 			},
 			{
 				net.ParseIP("10.20.30.1"),
-				2 * time.Second,
+				nil,
 			},
 		}
-		actual := uc.SearchBreakServer()
+		actual := uc.SearchBreakServer(3)
 
 		assert.Equal(t, expected, actual)
 	})
@@ -40,7 +41,7 @@ func TestSearchBreakServer(t *testing.T) {
 		uc := NewLogAnalysisUseCase(l)
 		expected := []BreakServer{}
 
-		actual := uc.SearchBreakServer()
+		actual := uc.SearchBreakServer(3)
 
 		assert.Equal(t, expected, actual)
 	})
